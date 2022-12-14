@@ -93,6 +93,7 @@ Within the dataset there are 10 variables:
 library(tidyverse)
 library(dplyr)
 library(data.table)
+library(corrplot)
 ```
 
 ## Loading the Data
@@ -239,6 +240,32 @@ summary(data2)
     ##  Mean   : 534.65         
     ##  3rd Qu.: 700.09         
     ##  Max.   :1698.44
+
+``` r
+#create barcharts
+ggplot(data2, aes(type, fill= type)) +
+  geom_bar(width = .4, color='black') +
+  theme_linedraw() +
+ scale_fill_brewer(palette="Reds")
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+ggplot(data2, aes(age)) +
+  geom_histogram()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+ggplot(data2, aes(x=type, y=ins)) +
+  geom_point(position = 'jitter')
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ## Modeling: Linear Discriminant Analysis
 
