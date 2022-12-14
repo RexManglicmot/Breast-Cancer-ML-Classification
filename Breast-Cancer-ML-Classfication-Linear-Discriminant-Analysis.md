@@ -39,6 +39,8 @@ Things Need To Do/Questions:
 
 ## Introduction
 
+![](https://health.osu.edu/-/media/health/images/stories/2022/09/breast-scan.jpg?la=en&hash=F19C705F3A4E59F446666BF1EB7079DB)
+
 There are many factors that attribute to formation cancer, but there is
 one dominant factor among all cancers, and that is gene expression.
 There are numerous studies that have shown that having a certain gene
@@ -58,111 +60,209 @@ The project is structured in the following chapters:
 3.  Loading the Data
 4.  Cleaning the Data
 5.  Exploratory Data Analysis
-6.  Modelling: Linear Discriminant Analysis
+6.  Modeling: Linear Discriminant Analysis
 7.  Limitations
 8.  Conclusion
 9.  Inspiration for this project
 
 A special acknowledgement to the University of Irvine Data Repository
 for providing the dataset to the public.[^3] A special acknowledgement
-for Samuele Fiorini from University of Genoa for the original
-dataset.[^4]
+for Miguel Patricio et al. from the Faculty of Medicine of the
+University of Coimbra and also Manuel Gomes from the University Hospital
+Centre of Coimbra for their research and for providing this dataset.
 
-The dataset contains 20,531 genes and unfortunately the name of the
-genes could not be identified (still in the processing of contacting
-dataset owner). There are 801 observations and each observation is
-classified as having one of 5 types of cancers.
+Within the dataset there are 10 variables:
+
+1.  Age (years)
+2.  BMI (kg/m2)
+3.  Glucose (mg/dL)
+4.  Insulin (µU/mL)
+5.  HOMA
+6.  Leptin (ng/mL)
+7.  Adiponectin (µg/mL)
+8.  Resistin (ng/mL)
+9.  MCP-1(pg/dL)
+10. Classification: 1-Healthy Controls and 2-BC Patients
 
 ## Loading the Libraries
 
 ``` r
-# Load the libraries
+#install.packages('data.table') #installed on 12/14/22
+
+#Load the libraries
 library(tidyverse)
 library(dplyr)
+library(data.table)
 ```
 
 ## Loading the Data
 
 ``` r
 #load the dataset
-#data <- read.csv('data.csv')
-#data_labels <- read.csv('labels.csv')
+data <- read.csv('dataR2.csv')
 
 #view the first few rows of the data
-#head(data, 10)
-#head(data_labels, 10)
-
-#look at the number of the rows and columns we have
-#dim(data)
+head(data, 10)
 ```
 
-the data dataset with \>20K columns abd the data_label has the
-classification of the patient.
+    ##    Age      BMI Glucose Insulin      HOMA  Leptin Adiponectin Resistin    MCP.1
+    ## 1   48 23.50000      70   2.707 0.4674087  8.8071    9.702400  7.99585  417.114
+    ## 2   83 20.69049      92   3.115 0.7068973  8.8438    5.429285  4.06405  468.786
+    ## 3   82 23.12467      91   4.498 1.0096511 17.9393   22.432040  9.27715  554.697
+    ## 4   68 21.36752      77   3.226 0.6127249  9.8827    7.169560 12.76600  928.220
+    ## 5   86 21.11111      92   3.549 0.8053864  6.6994    4.819240 10.57635  773.920
+    ## 6   49 22.85446      92   3.226 0.7320869  6.8317   13.679750 10.31760  530.410
+    ## 7   89 22.70000      77   4.690 0.8907873  6.9640    5.589865 12.93610 1256.083
+    ## 8   76 23.80000     118   6.470 1.8832013  4.3110   13.251320  5.10420  280.694
+    ## 9   73 22.00000      97   3.350 0.8015433  4.4700   10.358725  6.28445  136.855
+    ## 10  75 23.00000      83   4.952 1.0138395 17.1270   11.578990  7.09130  318.302
+    ##    Classification
+    ## 1               1
+    ## 2               1
+    ## 3               1
+    ## 4               1
+    ## 5               1
+    ## 6               1
+    ## 7               1
+    ## 8               1
+    ## 9               1
+    ## 10              1
+
+``` r
+#look at the number of the rows and columns we have
+dim(data)
+```
+
+    ## [1] 116  10
+
+The dataset has the 10 variables and 116 observations. So far we were
+able to download the data correctly.
 
 ## Cleaning the Data
 
-First, we need to do is combine the datasets by using an join function
-by using the X variable and store the new data set into an new object,
-data2.
+Let’s create a new object of the orginal data and change the variable
+names. Some of them like Classification is too long and let’s change
+them to a name much shorter.
 
 ``` r
-#left-join on a single coumn, the X variable
-#data2 <- merge (x=data, y= data_labels,
-                #by='X', all.x=TRUE)
+#store data into a new object for data cleaning
+data2 <- data
 
-#check if the joined worked
-#ncol(data)
-#which(colnames(data2)=='Class')
+#change variable name to lowercase
+names(data2) <- tolower(names(data2))
+
+#change variable name to 3-4 words
+names(data2)[3:10] <- c('glu', 'ins', 'hom', 'lep', 'adi', 'res', 'mcp', 'type')
 ```
 
-We see that data we have a total of 20532 and in data2 we 20533, we can
-assume that we added the Class column. But just to make sure, we called
-the which function that allowed to us locate the Class column, which was
-30532. We have successfully added the column.
-
-Now for more data cleaning, we have quite a few genes, how about we see
-and get rid of genes that are not present in any of the 801
-observations.
+Let’s inspect our data for any NA values and see all the variables are
+correctly classed.
 
 ``` r
-#stored all columns that had all zeros 
-#Note. IT was working before butit was not working now. 
-#Had to include dyplyr library for it to work 
-#data3 <- data2 %>%
-  #select(where(~ all(. ==0)))
+#check for any NA values
+sum(is.na(data2))
 ```
 
+    ## [1] 0
+
 ``` r
-#create a new object with columns with numeric value
-#data4 <- data2 %>%
-  #select(where(~ any(. !=0)))
+#another method to check for NA values
+any(is.na(data2))
 ```
+
+    ## [1] FALSE
+
+``` r
+#check to see if there are any alphabet letters in the dataframe since we are dealing with a quant dataset
+sapply(sapply(data2, grep, pattern = "[a-z]+"), length)
+```
+
+    ##  age  bmi  glu  ins  hom  lep  adi  res  mcp type 
+    ##    0    0    0    0    0    0    0    0    0    0
+
+``` r
+#check class other than str function
+data.frame(sapply(data2,class))
+```
+
+    ##      sapply.data2..class.
+    ## age               integer
+    ## bmi               numeric
+    ## glu               integer
+    ## ins               numeric
+    ## hom               numeric
+    ## lep               numeric
+    ## adi               numeric
+    ## res               numeric
+    ## mcp               numeric
+    ## type              integer
+
+Everything looks ok except for the type variable; it needs to be a
+factor.
+
+``` r
+#change last column to a factor
+data2$type=as.factor(data2$type)
+
+#check if it was changed
+class(data2$type)
+```
+
+    ## [1] "factor"
+
+Now, let’s explore!
 
 ## Exploratory Data Analysis
+
+``` r
+summary(data2)
+```
+
+    ##       age            bmi             glu              ins        
+    ##  Min.   :24.0   Min.   :18.37   Min.   : 60.00   Min.   : 2.432  
+    ##  1st Qu.:45.0   1st Qu.:22.97   1st Qu.: 85.75   1st Qu.: 4.359  
+    ##  Median :56.0   Median :27.66   Median : 92.00   Median : 5.925  
+    ##  Mean   :57.3   Mean   :27.58   Mean   : 97.79   Mean   :10.012  
+    ##  3rd Qu.:71.0   3rd Qu.:31.24   3rd Qu.:102.00   3rd Qu.:11.189  
+    ##  Max.   :89.0   Max.   :38.58   Max.   :201.00   Max.   :58.460  
+    ##       hom               lep              adi              res        
+    ##  Min.   : 0.4674   Min.   : 4.311   Min.   : 1.656   Min.   : 3.210  
+    ##  1st Qu.: 0.9180   1st Qu.:12.314   1st Qu.: 5.474   1st Qu.: 6.882  
+    ##  Median : 1.3809   Median :20.271   Median : 8.353   Median :10.828  
+    ##  Mean   : 2.6950   Mean   :26.615   Mean   :10.181   Mean   :14.726  
+    ##  3rd Qu.: 2.8578   3rd Qu.:37.378   3rd Qu.:11.816   3rd Qu.:17.755  
+    ##  Max.   :25.0503   Max.   :90.280   Max.   :38.040   Max.   :82.100  
+    ##       mcp          type  
+    ##  Min.   :  45.84   1:52  
+    ##  1st Qu.: 269.98   2:64  
+    ##  Median : 471.32         
+    ##  Mean   : 534.65         
+    ##  3rd Qu.: 700.09         
+    ##  Max.   :1698.44
 
 ## Modeling: Linear Discriminant Analysis
 
 ![](https://repository-images.githubusercontent.com/13402862/b8473680-4379-11ea-8d72-e87a518def4b)
 
 **Linear Discriminant Analysis** is a dimensional reduction technique
-used to separate two or more classes.[^5] The goal is to **project the
+used to separate two or more classes.[^4] The goal is to **project the
 data onto a lower-dimensional space** that has decent class
-separability.[^6]
+separability.[^5]
 
 LDA is a type of dimensional reduction technique that reduces the number
-of dimensions in the dataset.[^7] The objective is to reduce a high
+of dimensions in the dataset.[^6] The objective is to reduce a high
 dimensional dataset to a lower dimensional space and to have separation
-between classes (therefore, our classification)[^8] Recall that
+between classes (therefore, our classification)[^7] Recall that
 Multidimensional data has many features (i.e. variables) that be are
 correlated to one another and dimensional reduction reduces this to 2 or
-3 dimensions.[^9]
+3 dimensions.[^8]
 
 I decided to pput this in another object for closer inspection and saw
 that 267 variables out of the 20531 variables had zero values. Now let’s
 get rid of this of these columns and create a new object, data4, that
 contains all non-zero, numeric values.
 
-Below are the Steps to do an LDA[^10]:
+Below are the Steps to do an LDA[^9]:
 
 1.  Compute Mean vectors of each class of dependent variables
 
@@ -190,19 +290,16 @@ Below are the Steps to do an LDA[^10]:
 
 [^2]: <https://theconversation.com/what-is-a-protein-a-biologist-explains-152870#>:\~:text=Scientists%20are%20not%20exactly%20sure,causing%20your%20muscles%20to%20work.
 
-[^3]: <https://archive.ics.uci.edu/ml/datasets/gene+expression+cancer+RNA-Seq>
+[^3]: <https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Coimbra>
 
-[^4]: Samuele Fiorini, samuele.fiorini ‘@’ dibris.unige.it, University
-    of Genoa
+[^4]: <https://www.geeksforgeeks.org/ml-linear-discriminant-analysis/#>:\~:text=Linear%20Discriminant%20Analysis%20or%20Normal,separating%20two%20or%20more%20classes.
 
-[^5]: <https://www.geeksforgeeks.org/ml-linear-discriminant-analysis/#>:\~:text=Linear%20Discriminant%20Analysis%20or%20Normal,separating%20two%20or%20more%20classes.
+[^5]: <https://sebastianraschka.com/Articles/2014_python_lda.html>
 
-[^6]: <https://sebastianraschka.com/Articles/2014_python_lda.html>
+[^6]: <https://www.mygreatlearning.com/blog/linear-discriminant-analysis-or-lda/>
 
-[^7]: <https://www.mygreatlearning.com/blog/linear-discriminant-analysis-or-lda/>
+[^7]: <https://www.digitalvidya.com/blog/linear-discriminant-analysis/>
 
 [^8]: <https://www.digitalvidya.com/blog/linear-discriminant-analysis/>
 
-[^9]: <https://www.digitalvidya.com/blog/linear-discriminant-analysis/>
-
-[^10]: <https://www.mygreatlearning.com/blog/linear-discriminant-analysis-or-lda/>
+[^9]: <https://www.mygreatlearning.com/blog/linear-discriminant-analysis-or-lda/>

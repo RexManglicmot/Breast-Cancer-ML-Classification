@@ -22,6 +22,8 @@ Things Need To Do/Questions:
 
 ## Introduction
 
+![](https://health.osu.edu/-/media/health/images/stories/2022/09/breast-scan.jpg?la=en&hash=F19C705F3A4E59F446666BF1EB7079DB)
+
 There are many factors that attribute to formation cancer, but there is one dominant factor among all cancers, and that is gene expression. There are numerous studies that have shown that having a certain gene may likely contribute to a formation of a certain cancer. The human genome is estimated to have about 20,000 genes.^[https://sitn.hms.harvard.edu/flash/2012/issue127a/] These genes then go through mechanisms of protein synthesis which in the end create a vast array of proteins (estimated to be 20,000 or even more^[https://theconversation.com/what-is-a-protein-a-biologist-explains-152870#:~:text=Scientists%20are%20not%20exactly%20sure,causing%20your%20muscles%20to%20work.]) and these proteins  then have the capability to form cells (and eventually cancer).
 
 Studying genes and their expressions provide scientist the opportunity to idneitfy which patients are susceptible to certain cancers.
@@ -33,75 +35,94 @@ The project is structured in the following chapters:
 3. Loading the Data
 4. Cleaning the Data
 5. Exploratory Data Analysis
-6. Modelling: Linear Discriminant Analysis
+6. Modeling: Linear Discriminant Analysis
 7. Limitations
 8. Conclusion
 9. Inspiration for this project
 
-A special acknowledgement to the University of Irvine Data Repository for providing the dataset to the public.^[https://archive.ics.uci.edu/ml/datasets/gene+expression+cancer+RNA-Seq] A special acknowledgement for Samuele Fiorini from University of Genoa for the original dataset.^[Samuele Fiorini, samuele.fiorini '@' dibris.unige.it, University of Genoa]
+A special acknowledgement to the University of Irvine Data Repository for providing the dataset to the public.^[https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Coimbra] A special acknowledgement for Miguel Patricio et al. from the Faculty of Medicine of the University of Coimbra and also Manuel Gomes from the University Hospital Centre of Coimbra for their research and for providing this dataset.
 
-The dataset contains 20,531 genes and unfortunately the name of the genes could not be identified (still in the processing of contacting dataset owner). There are 801 observations and each observation is classified as having one of 5 types of cancers.
+Within the dataset there are 10 variables:
+
+1. Age (years)
+2. BMI (kg/m2)
+3. Glucose (mg/dL)
+4. Insulin (µU/mL)
+5. HOMA
+6. Leptin (ng/mL)
+7. Adiponectin (µg/mL)
+8. Resistin (ng/mL)
+9. MCP-1(pg/dL)
+10. Classification: 1-Healthy Controls and 2-BC Patients
+
+
 
 ## Loading the Libraries
 ```{r, message = FALSE}
-# Load the libraries
+#install.packages('data.table') #installed on 12/14/22
+
+#Load the libraries
 library(tidyverse)
 library(dplyr)
-
+library(data.table)
 ```
-
-
 
 ## Loading the Data
 ```{r}
 #load the dataset
-#data <- read.csv('data.csv')
-#data_labels <- read.csv('labels.csv')
+data <- read.csv('dataR2.csv')
 
 #view the first few rows of the data
-#head(data, 10)
-#head(data_labels, 10)
+head(data, 10)
 
 #look at the number of the rows and columns we have
-#dim(data)
+dim(data)
 ```
-the data dataset with >20K columns abd the data_label has the classification of the patient.
+The dataset has the 10 variables and 116 observations. So far we were able to download the data correctly.
 
 ## Cleaning the Data
-First, we need to do is combine the datasets by using an join function by using the X variable and store the new data set into an new object, data2. 
+Let's create a new object of the orginal data and change the variable names. Some of them like Classification is too long and let's change them to a name much shorter.
 ```{r}
-#left-join on a single coumn, the X variable
-#data2 <- merge (x=data, y= data_labels,
-                #by='X', all.x=TRUE)
+#store data into a new object for data cleaning
+data2 <- data
 
-#check if the joined worked
-#ncol(data)
-#which(colnames(data2)=='Class')
-```
-We see that data we have a total of 20532 and in data2 we 20533, we can assume that we added the Class column. But just to make sure, we called the which function that allowed to us locate the Class column, which was 30532. We have successfully added the column.
+#change variable name to lowercase
+names(data2) <- tolower(names(data2))
 
-Now for more data cleaning, we have quite a few genes, how about we see and get rid of genes that are not present in any of the 801 observations.
-
-```{r}
-#stored all columns that had all zeros 
-#Note. IT was working before butit was not working now. 
-#Had to include dyplyr library for it to work 
-#data3 <- data2 %>%
-  #select(where(~ all(. ==0)))
+#change variable name to 3-4 words
+names(data2)[3:10] <- c('glu', 'ins', 'hom', 'lep', 'adi', 'res', 'mcp', 'type')
 ```
 
+Let's inspect our data for any NA values and see all the variables are correctly classed.
+```{r}
+#check for any NA values
+sum(is.na(data2))
 
+#another method to check for NA values
+any(is.na(data2))
+
+#check to see if there are any alphabet letters in the dataframe since we are dealing with a quant dataset
+sapply(sapply(data2, grep, pattern = "[a-z]+"), length)
+
+#check class other than str function
+data.frame(sapply(data2,class))
+```
+Everything looks ok except for the type variable; it needs to be a factor.
 
 ```{r}
-#create a new object with columns with numeric value
-#data4 <- data2 %>%
-  #select(where(~ any(. !=0)))
+#change last column to a factor
+data2$type=as.factor(data2$type)
+
+#check if it was changed
+class(data2$type)
 ```
+Now, let's explore!
+
 
 
 ## Exploratory Data Analysis
 ```{r}
-
+summary(data2)
 ```
 
 
