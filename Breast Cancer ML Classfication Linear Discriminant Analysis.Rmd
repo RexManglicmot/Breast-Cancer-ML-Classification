@@ -81,7 +81,7 @@ dim(data)
 The dataset has the 10 variables and 116 observations. So far we were able to download the data correctly.
 
 ## Cleaning the Data
-Let's create a new object of the orginal data and change the variable names. Some of them like Classification is too long and let's change them to a name much shorter.
+Let's create a new object of the orginal data and change the variable names. Some of them like Classification are too long and let's change them to a name much shorter.
 ```{r}
 #store data into a new object for data cleaning
 data2 <- data
@@ -129,7 +129,7 @@ summary(data2)
 ## Modeling: Linear Discriminant Analysis
 ![](https://repository-images.githubusercontent.com/13402862/b8473680-4379-11ea-8d72-e87a518def4b)
 
-**Linear Discriminant Analysis** is a dimensional reduction technique used to separate two or more classes.^[https://www.geeksforgeeks.org/ml-linear-discriminant-analysis/#:~:text=Linear%20Discriminant%20Analysis%20or%20Normal,separating%20two%20or%20more%20classes.] The goal is to **project the data onto a lower-dimensional space** that has decent class separability.^[https://sebastianraschka.com/Articles/2014_python_lda.html]
+**Linear Discriminant Analysis** is a dimensional reduction technique used to separate two or more classes.^[https://www.geeksforgeeks.org/ml-linear-discriminant-analysis/#:~:text=Linear%20Discriminant%20Analysis%20or%20Normal,separating%20two%20or%20more%20classes.] The goal is to project the data onto a *lower-dimensional space* that has decent class separability.^[https://sebastianraschka.com/Articles/2014_python_lda.html]
 
 LDA is a type of dimensional reduction technique that reduces the number of dimensions in the dataset.^[https://www.mygreatlearning.com/blog/linear-discriminant-analysis-or-lda/] The objective is to reduce a high dimensional dataset to a lower dimensional space and to have separation between classes (therefore, our classification)^[https://www.digitalvidya.com/blog/linear-discriminant-analysis/] Recall that Multidimensional data has many features (i.e. variables) that be are correlated to one another and dimensional reduction reduces this to 2 or 3 dimensions.^[https://www.digitalvidya.com/blog/linear-discriminant-analysis/]
 

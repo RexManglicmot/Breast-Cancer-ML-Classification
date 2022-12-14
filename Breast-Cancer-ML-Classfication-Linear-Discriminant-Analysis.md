@@ -141,7 +141,7 @@ able to download the data correctly.
 ## Cleaning the Data
 
 Let’s create a new object of the orginal data and change the variable
-names. Some of them like Classification is too long and let’s change
+names. Some of them like Classification are too long and let’s change
 them to a name much shorter.
 
 ``` r
@@ -245,8 +245,8 @@ summary(data2)
 ![](https://repository-images.githubusercontent.com/13402862/b8473680-4379-11ea-8d72-e87a518def4b)
 
 **Linear Discriminant Analysis** is a dimensional reduction technique
-used to separate two or more classes.[^4] The goal is to **project the
-data onto a lower-dimensional space** that has decent class
+used to separate two or more classes.[^4] The goal is to project the
+data onto a *lower-dimensional space* that has decent class
 separability.[^5]
 
 LDA is a type of dimensional reduction technique that reduces the number
