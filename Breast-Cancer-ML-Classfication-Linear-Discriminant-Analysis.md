@@ -252,20 +252,30 @@ ggplot(data2, aes(type, fill= type)) +
 ![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
+data3 <- data2 %>%
+  group_by(type) %>%
+  summarise(across(everything(), mean),
+            .groups = 'drop') %>%
+  as.data.frame()
+
+data4 <- t(data3)
+```
+
+``` r
 ggplot(data2, aes(age)) +
   geom_histogram()
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 ggplot(data2, aes(x=type, y=ins)) +
   geom_point(position = 'jitter')
 ```
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ## Modeling: Linear Discriminant Analysis
 

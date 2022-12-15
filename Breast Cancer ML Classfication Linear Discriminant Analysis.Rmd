@@ -136,6 +136,19 @@ ggplot(data2, aes(type, fill= type)) +
 ```
 
 ```{r}
+
+data3 <- data2 %>%
+  group_by(type) %>%
+  summarise(across(everything(), mean),
+            .groups = 'drop') %>%
+  as.data.frame()
+
+data4 <- t(data3)
+
+```
+
+
+```{r}
 ggplot(data2, aes(age)) +
   geom_histogram()
   
