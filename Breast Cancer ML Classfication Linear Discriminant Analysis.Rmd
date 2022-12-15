@@ -285,4 +285,49 @@ Below are the Steps to do an LDA^[https://www.mygreatlearning.com/blog/linear-di
 ## Conclusion
 
 
+## Appendix
+```{r, warning=FALSE, message= FALSE}
+library(car)
+```
+
+
+```{r, message= FALSE}
+#curious to see the relation age and bmi
+ggplot(data2, aes(age, bmi)) +
+  geom_point() +
+   geom_smooth(method=lm)
+
+scatterplot(bmi ~ age, data=data2)
+#this plot contains:
+#the points
+#the regression line (in blue)
+#the smoothed conditional spread (in blue dashed line)
+#the non-parametric regression smooth (light blue)
+```
+
+In both graphs, it seems there is no relationship of age and BMI.
+
+```{r, message= FALSE}
+#curious to see the relation age and bmi
+ggplot(data2, aes(age, glu)) +
+  geom_point() +
+   geom_smooth(method=lm)
+
+scatterplot(glu ~ age, data=data2, col='orange')
+```
+
+It would seem the slope is positive and there could be a relationship. 
+
+```{r, message= FALSE}
+#curious to see the relation age and bmi
+ggplot(data2, aes(age, ins)) +
+  geom_point() +
+   geom_smooth(method=lm)
+
+scatterplot(ins ~ age, data=data2, col='magenta')
+```
+
+Slope looks flat.
+
+
 ## Inspiration for this project

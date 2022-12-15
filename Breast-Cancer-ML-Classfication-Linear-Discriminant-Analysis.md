@@ -19,6 +19,7 @@ Rex Manglicmot
     Discriminant Analysis</a>
 -   <a href="#limitations" id="toc-limitations">Limitations</a>
 -   <a href="#conclusion" id="toc-conclusion">Conclusion</a>
+-   <a href="#appendix" id="toc-appendix">Appendix</a>
 -   <a href="#inspiration-for-this-project"
     id="toc-inspiration-for-this-project">Inspiration for this project</a>
 
@@ -411,6 +412,71 @@ Below are the Steps to do an LDA[^9]:
 ## Limitations
 
 ## Conclusion
+
+## Appendix
+
+``` r
+library(car)
+```
+
+``` r
+#curious to see the relation age and bmi
+ggplot(data2, aes(age, bmi)) +
+  geom_point() +
+   geom_smooth(method=lm)
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+scatterplot(bmi ~ age, data=data2)
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+
+``` r
+#this plot contains:
+#the points
+#the regression line (in blue)
+#the smoothed conditional spread (in blue dashed line)
+#the non-parametric regression smooth (light blue)
+```
+
+In both graphs, it seems there is no relationship of age and BMI.
+
+``` r
+#curious to see the relation age and bmi
+ggplot(data2, aes(age, glu)) +
+  geom_point() +
+   geom_smooth(method=lm)
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+scatterplot(glu ~ age, data=data2, col='orange')
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+
+It would seem the slope is positive and there could be a relationship.
+
+``` r
+#curious to see the relation age and bmi
+ggplot(data2, aes(age, ins)) +
+  geom_point() +
+   geom_smooth(method=lm)
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+scatterplot(ins ~ age, data=data2, col='magenta')
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+
+Slope looks flat.
 
 ## Inspiration for this project
 
