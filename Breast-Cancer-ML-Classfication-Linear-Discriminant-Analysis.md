@@ -88,12 +88,15 @@ Within the dataset there are 10 variables:
 
 ``` r
 #install.packages('data.table') #installed on 12/14/22
+#install.packages('ggExtra')
 
 #Load the libraries
 library(tidyverse)
 library(dplyr)
 library(data.table)
 library(corrplot)
+library(ggExtra)
+library(ggplot2)
 ```
 
 ## Loading the Data
@@ -242,6 +245,11 @@ summary(data2)
     ##  Max.   :1698.44
 
 ``` r
+# ggplot(data2, aes(x=type, color =(.))) +
+#   geom_boxplot()
+```
+
+``` r
 #create barcharts
 ggplot(data2, aes(type, fill= type)) +
   geom_bar(width = .4, color='black') +
@@ -256,14 +264,29 @@ ggplot(data2, aes(type, fill= type)) +
         axis.title = element_text(face = "bold"))
 ```
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
-data3 <- data2 %>%
-  group_by(type) %>%
-  summarise(across(everything(), mean),
-            .groups = 'drop') %>%
-  as.data.frame()
+# 
+# data3 <- data2 %>%
+#   group_by(type) %>%
+#   summarise(across(everything(), mean),
+#             .groups = 'drop') %>%
+#   as.data.frame()
+# 
+# names(data4)
+#   
+# data4 <- data4[-1, ] %>%
+#   rename('1' = c1,
+#          '2' = c2)
+# 
+# ggplot(data4, aes(x=1)) +
+#   geom_bar()
+```
+
+``` r
+# ggplot(data4, aes(x=V1, y=V2)) +
+#   geom_bar()
 ```
 
 ``` r
@@ -273,14 +296,45 @@ ggplot(data2, aes(age)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
-ggplot(data2, aes(x=type, y=ins)) +
-  geom_point(position = 'jitter')
+g <- ggplot(data2, aes(x=type, y=age)) +
+  geom_point(position = 'jitter', color = 'black') +
+  theme_gray() +
+   labs(title = 'Type against Age + Overall Age Distribution',
+       x = 'Participants',
+       caption = '1 = Control Group and 2 = Breast Cancer Group',
+       y = 'Age Range') +
+  theme(plot.title = element_text(hjust = 0.5, size=10),
+        plot.caption = element_text(hjust = 0.5))
+
+ggMarginal(g, type = 'histogram',
+           margins = 'y',
+           size = 3,
+           fill=2)
 ```
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+g2 <- ggplot(data2, aes(x=type, y=bmi)) +
+  geom_point(position = 'jitter') +
+  theme_gray() +
+   labs(title = 'Type against BMI + Overall BMI Distribution',
+       x = 'Participants',
+       caption = '1 = Control Group and 2 = Breast Cancer Group',
+       y = 'GMI Range') +
+  theme(plot.title = element_text(hjust = 0.5, size=10),
+        plot.caption = element_text(hjust = 0.5))
+
+ggMarginal(g2, type = 'histogram',
+           margins = 'y',
+           size = 3,
+           fill=7)
+```
+
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ## Modeling: Linear Discriminant Analysis
 
