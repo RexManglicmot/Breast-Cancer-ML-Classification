@@ -36,6 +36,9 @@ Things Need To Do/Questions:
 -   Grammar.
 -   Get feedback and incorporate
 -   Fill in intro
+-   How do I create a boxplot from all the quant columns against 2
+    categorical? I know how to do this within a single column, but not
+    multiple. Ditto for bar charts?
 
 ## Introduction
 
@@ -290,15 +293,6 @@ ggplot(data2, aes(type, fill= type)) +
 ```
 
 ``` r
-ggplot(data2, aes(age)) +
-  geom_histogram()
-```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
-
-``` r
 g <- ggplot(data2, aes(x=type, y=age)) +
   geom_point(position = 'jitter', color = 'black') +
   theme_gray() +
@@ -315,7 +309,7 @@ ggMarginal(g, type = 'histogram',
            fill=2)
 ```
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 g2 <- ggplot(data2, aes(x=type, y=bmi)) +
@@ -334,7 +328,7 @@ ggMarginal(g2, type = 'histogram',
            fill=7)
 ```
 
-![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ## Modeling: Linear Discriminant Analysis
 

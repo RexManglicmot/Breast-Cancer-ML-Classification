@@ -16,6 +16,7 @@ Things Need To Do/Questions:
 * Grammar.
 * Get feedback and incorporate
 * Fill in intro
+* How do I create a boxplot from all the quant columns against 2 categorical? I know how to do this within a single column, but not multiple. Ditto for bar charts?
 
 
 
@@ -172,15 +173,6 @@ ggplot(data2, aes(type, fill= type)) +
 ```{r}
 # ggplot(data4, aes(x=V1, y=V2)) +
 #   geom_bar()
-```
-
-
-
-```{r}
-ggplot(data2, aes(age)) +
-  geom_histogram()
-  
-  
 ```
 
 
