@@ -246,7 +246,14 @@ summary(data2)
 ggplot(data2, aes(type, fill= type)) +
   geom_bar(width = .4, color='black') +
   theme_linedraw() +
- scale_fill_brewer(palette="Reds")
+ scale_fill_brewer(palette="Reds") +
+  labs(title = 'Number of Control and Breast Cancer Patients',
+       x = 'Participants',
+       caption = '1 = Control Group and 2 = Breast Cancer Group',
+       y = 'Count') +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5),
+        axis.title = element_text(face = "bold"))
 ```
 
 ![](Breast-Cancer-ML-Classfication-Linear-Discriminant-Analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
@@ -257,11 +264,6 @@ data3 <- data2 %>%
   summarise(across(everything(), mean),
             .groups = 'drop') %>%
   as.data.frame()
-
-# data4 <- t(data3) %>%
-#   as.data.frame() %>%
-#   rename(1 = 'V1',
-#          2 = 'V2')
 ```
 
 ``` r
