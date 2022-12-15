@@ -258,7 +258,10 @@ data3 <- data2 %>%
             .groups = 'drop') %>%
   as.data.frame()
 
-data4 <- t(data3)
+# data4 <- t(data3) %>%
+#   as.data.frame() %>%
+#   rename(1 = 'V1',
+#          2 = 'V2')
 ```
 
 ``` r
